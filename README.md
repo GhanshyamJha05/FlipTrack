@@ -142,19 +142,53 @@ Want to test FlipTrack's UI and features without manually creating data? We have
 
 ---
 
-## 📁 Project Structure
+## 📁 Architecture Diagram
 
-```text
-FlipTrack/
-├── app/
-│   ├── blocks/             # Reusable UI components (Sidebar, Navbar, Tables)
-│   ├── routes/             # React Router v7 file-based routing and API endpoints
-│   ├── services/           # Backend services (Scrapers, AI logic)
-│   ├── styles/             # Global CSS resets and custom theme properties
-│   └── utils/              # Helper functions (Supabase SSR clients, math helpers)
-├── prisma/                 # Database schema and migrations
-├── scripts/                # Database seeding and utility scripts
-└── public/                 # Static assets (Favicon, images)
+FlipTrack relies on a highly decoupled but tightly integrated modern tech stack. Below is a high-level overview of how the systems communicate:
+
+```mermaid
+graph TD
+    %% User and UI Layer
+    Client([User Browser])
+    UI[React Router v7 UI<br/>(Components & CSS Modules)]
+    
+    %% API and Routing Layer
+    Loaders[Route Loaders & Actions<br/>(SSR Data Fetching)]
+    
+    %% Backend/DB Layer
+    Prisma[Prisma Client v5]
+    Postgres[(Supabase PostgreSQL)]
+    Auth{Supabase Auth}
+    
+    %% External Services
+    Groq[Groq API<br/>(Llama 3)]
+    VercelAI[Vercel AI SDK]
+    Cron[Cron Jobs<br/>(Market Scrapers)]
+
+    %% Connections
+    Client -->|Interacts with| UI
+    UI -->|Server-Side Requests| Loaders
+    
+    Loaders -->|Type-safe Queries| Prisma
+    Prisma <--> Postgres
+    
+    Loaders -->|Validates Session| Auth
+    
+    Loaders -->|Generates AI Insights| VercelAI
+    VercelAI <-->|API Calls| Groq
+    
+    Cron -->|Background Price Updates| Prisma
+    
+    %% Styling
+    classDef ui fill:#4a90e2,stroke:#fff,stroke-width:2px,color:#fff;
+    classDef server fill:#f5a623,stroke:#fff,stroke-width:2px,color:#fff;
+    classDef db fill:#3ECF8E,stroke:#fff,stroke-width:2px,color:#fff;
+    classDef ext fill:#8b572a,stroke:#fff,stroke-width:2px,color:#fff;
+    
+    class UI ui;
+    class Loaders server;
+    class Prisma,Postgres,Auth db;
+    class Groq,VercelAI,Cron ext;
 ```
 
 ---
