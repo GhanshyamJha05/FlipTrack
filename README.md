@@ -1,114 +1,182 @@
-# FlipTrack 🎯
-**Your Reselling Empire, Tracked in Real Time.**
+<div align="center">
+  <h1>🎯 FlipTrack</h1>
+  <p><strong>Your Reselling Empire, Tracked in Real Time.</strong></p>
+  
+  <p>
+    <a href="https://github.com/rushikesh-bobade/FlipTrack/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License: MIT"></a>
+    <a href="https://github.com/rushikesh-bobade/FlipTrack/pulls"><img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg" alt="PRs Welcome"></a>
+    <a href="https://reactrouter.com/"><img src="https://img.shields.io/badge/React_Router-v7-ca4245?logo=reactrouter" alt="React Router v7"></a>
+    <a href="https://supabase.com/"><img src="https://img.shields.io/badge/Database-Supabase-3ECF8E?logo=supabase" alt="Supabase"></a>
+    <a href="https://www.typescriptlang.org/"><img src="https://img.shields.io/badge/Language-TypeScript-3178C6?logo=typescript" alt="TypeScript"></a>
+  </p>
 
-An open-source SaaS platform designed specifically for sneaker, streetwear, and collectibles resellers to manage their inventory, track market prices, and analyze their business using AI.
+  <p>
+    An open-source SaaS platform designed specifically for sneaker, streetwear, and collectibles resellers to manage their inventory, track market prices, and analyze their business using AI. Built for the <strong>Open Source Hackathon by Elite Coders</strong>.
+  </p>
+</div>
 
-Built for the **Open Source Hackathon by Elite Coders**.
+<br />
+
+## 📖 Table of Contents
+- [Vision](#-vision)
+- [Key Features](#-key-features)
+- [Tech Stack Architecture](#-tech-stack-architecture)
+- [Getting Started](#-getting-started)
+  - [Prerequisites](#prerequisites)
+  - [Local Installation](#local-installation)
+  - [Database Setup](#database-setup)
+- [Demo Credentials](#-demo-credentials)
+- [Project Structure](#-project-structure)
+- [Contributing](#-contributing)
+- [License](#-license)
 
 ---
 
 ## 🚀 Vision
 
-The reselling market is booming, but resellers often rely on messy spreadsheets and fragmented tools to manage thousands of dollars in inventory. **FlipTrack** unifies the entire workflow. It is a feature-complete, modern alternative to existing premium trackers, fully open-sourced for the community. 
+The reselling market is booming, but resellers often rely on messy spreadsheets and fragmented tools to manage thousands of dollars in inventory. **FlipTrack** unifies the entire workflow into a single, cohesive dashboard. It is a feature-complete, modern alternative to existing premium trackers, fully open-sourced for the community. 
 
-Whether you are flipping 10 pairs a month or running a massive consignment operation, FlipTrack scales with you.
+Whether you are flipping 10 pairs a month or running a massive consignment operation, FlipTrack scales with your business logic.
 
 ---
 
 ## 🌟 Key Features
 
-- **Inventory Management**: Track every item with granular details (SKU, size, condition, purchase price, status).
-- **Market Price Intelligence**: Automated background scraping (via cron jobs) of real-time market prices across secondary platforms.
-- **AI Insights**: LLM-powered (Groq + Vercel AI SDK) insights to tell you exactly *when* to hold and *when* to sell based on market trends.
-- **Sales & Expense Tracking**: Log sales, track shipping/platform fees, and generate detailed P&L (Profit & Loss) statements.
-- **Secure Authentication**: Enterprise-grade secure authentication via Supabase (SSR Cookies).
-- **Beautiful Dashboard**: A premium, glassmorphic UI built from scratch using custom CSS properties, ensuring blazing fast performance without heavy UI libraries.
+*   📦 **Comprehensive Inventory Management**
+    Track every item with granular details including SKU, size, condition, purchase price, purchase date, and real-time status (`IN_STOCK`, `LISTED`, `SOLD`).
+*   📈 **Market Price Intelligence**
+    Automated background scraping (via API cron jobs) of real-time market prices across secondary platforms to keep your portfolio valuation accurate.
+*   🧠 **Generative AI Insights**
+    Powered by the Vercel AI SDK and Groq (Llama 3), FlipTrack analyzes your inventory and provides actionable, data-driven advice on *when* to hold and *when* to sell.
+*   💰 **Sales & Expense Tracking**
+    Log sales, track platform/shipping fees, and generate detailed P&L (Profit & Loss) statements instantly.
+*   🔒 **Enterprise-Grade Authentication**
+    Secure login flows utilizing Supabase Auth with strict Server-Side Rendering (SSR) cookie validation.
+*   ✨ **Premium Glassmorphic UI**
+    A sleek, responsive, and blazing-fast interface built entirely from scratch utilizing raw CSS variables and CSS Modules, guaranteeing zero bloat from heavy UI frameworks.
 
 ---
 
-## 🛠️ Tech Stack
+## 🏗️ Tech Stack Architecture
 
-FlipTrack is built using a modern, scalable, and fully type-safe stack:
+FlipTrack is engineered with a modern, scalable, and fully type-safe stack:
 
-- **Framework**: React Router v7 (SSR & Data Loaders)
-- **Database**: PostgreSQL (via Supabase)
-- **ORM**: Prisma Client v5
-- **Authentication**: Supabase Auth (Server-Side Rendering setup)
-- **AI Integration**: Vercel AI SDK + Groq API (Llama 3)
-- **Styling**: Vanilla CSS with comprehensive CSS Custom Properties for theming
-- **Deployment**: Ready for Vercel & Supabase
-- **Language**: TypeScript (Strict Mode)
+| Layer | Technology | Purpose |
+| :--- | :--- | :--- |
+| **Framework** | **React Router v7** | Full-stack routing, SSR, and Data Loaders |
+| **Language** | **TypeScript** | Strict end-to-end type safety |
+| **Database** | **PostgreSQL (Supabase)** | Robust, relational data storage |
+| **ORM** | **Prisma Client v5** | Type-safe database queries and schema management |
+| **Auth** | **Supabase Auth** | Secure, cookie-based session management |
+| **AI Integration** | **Vercel AI SDK + Groq API** | Lightning-fast LLM generation for business insights |
+| **Styling** | **Vanilla CSS Modules** | Scoped, collision-free CSS with a robust custom variable theme system |
 
 ---
 
-## 🏃 Getting Started (Local Setup)
+## 🏃 Getting Started
 
-To get a local copy of FlipTrack running on your machine:
+Follow these steps to set up the FlipTrack development environment locally.
 
-### 1. Prerequisites
-- **Node.js** (v18+)
-- **Git**
-- A **Supabase** account (for Database and Auth)
-- A **Groq** API key (for AI features)
+### Prerequisites
 
-### 2. Clone the Repository
-```bash
-git clone https://github.com/rushikesh-bobade/FlipTrack.git
-cd FlipTrack
-```
+Ensure you have the following installed and configured on your machine:
+*   [Node.js](https://nodejs.org/en/) (v18.x or higher)
+*   [Git](https://git-scm.com/)
+*   A [Supabase](https://supabase.com/) account (for Postgres DB and Auth)
+*   A [Groq](https://console.groq.com/) API key (for AI features)
 
-### 3. Install Dependencies
-```bash
-npm install
-```
+### Local Installation
 
-### 4. Environment Variables
-Create a `.env` file in the root directory. You can use `.env.example` as a base (if provided), or fill in the following:
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/rushikesh-bobade/FlipTrack.git
+   cd FlipTrack
+   ```
 
-```env
-# Supabase Configuration
-NEXT_PUBLIC_SUPABASE_URL=your_supabase_project_url
-NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
-DATABASE_URL=your_supabase_transaction_pooler_url
-DIRECT_URL=your_supabase_session_url
+2. **Install NPM dependencies**
+   ```bash
+   npm install
+   ```
 
-# Groq AI
-GROQ_API_KEY=your_groq_api_key
-```
+3. **Configure Environment Variables**
+   Create a `.env` file in the root directory based on `.env.example` (if provided), and populate it:
+   ```env
+   # Supabase Configuration
+   NEXT_PUBLIC_SUPABASE_URL="your_supabase_project_url"
+   NEXT_PUBLIC_SUPABASE_ANON_KEY="your_supabase_anon_key"
+   DATABASE_URL="your_supabase_transaction_pooler_url"
+   DIRECT_URL="your_supabase_session_url"
+   
+   # Groq AI
+   GROQ_API_KEY="your_groq_api_key"
+   ```
 
-### 5. Database Setup (Prisma)
-Push the Prisma schema to your Supabase Postgres database:
+### Database Setup
+
+Sync your Prisma schema with your Supabase Postgres instance and generate the Prisma Client:
+
 ```bash
 npx prisma db push
 npx prisma generate
 ```
 
-### 6. Start the Development Server
+Start the Vite development server:
 ```bash
 npm run dev
 ```
-The application will be running on `http://localhost:5173`. 
+The application will be running locally at `http://localhost:5173`.
 
 ---
 
-## 💡 Demo Setup
+## 💡 Demo Credentials
 
-Want to see it in action without manually creating data? We have included a demo script that provisions a test user and sample sneaker inventory.
+Want to test FlipTrack's UI and features without manually creating data? We have included an automated seed script that provisions a test user and sample sneaker inventory.
 
-1. Start the server: `npm run dev`
-2. Run the seed script:
+1. Ensure your development server is running (`npm run dev`).
+2. Execute the demo creation script:
    ```bash
    npx tsx scripts/create-demo-user.ts
    ```
 3. Navigate to `http://localhost:5173/auth/login`.
-4. Click **"Use Demo Credentials"** to instantly log into the populated dashboard.
+4. Click the **"Use Demo Credentials"** button on the login form to instantly authenticate and view the populated dashboard.
+
+---
+
+## 📁 Project Structure
+
+```text
+FlipTrack/
+├── app/
+│   ├── blocks/             # Reusable UI components (Sidebar, Navbar, Tables)
+│   ├── routes/             # React Router v7 file-based routing and API endpoints
+│   ├── services/           # Backend services (Scrapers, AI logic)
+│   ├── styles/             # Global CSS resets and custom theme properties
+│   └── utils/              # Helper functions (Supabase SSR clients, math helpers)
+├── prisma/                 # Database schema and migrations
+├── scripts/                # Database seeding and utility scripts
+└── public/                 # Static assets (Favicon, images)
+```
+
+---
+
+## 🤝 Contributing
+
+FlipTrack is an open-source project and we welcome contributions from the community! 
+
+Please read our [Contributing Guidelines](CONTRIBUTING.md) and our [Code of Conduct](CODE_OF_CONDUCT.md) before submitting Pull Requests.
+
+1. Fork the Project
+2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your Changes (`git commit -m 'feat: Add some AmazingFeature'`)
+4. Push to the Branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
 
 ---
 
 ## 🛡️ License
 
-Distributed under the **MIT License**. See `LICENSE` for more information.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
----
-
-*Made with ❤️ for the Open Source Hackathon.*
+<div align="center">
+  <i>Built with ❤️ by Rushikesh Bobade and Contributors for the Elite Coders community.</i>
+</div>
