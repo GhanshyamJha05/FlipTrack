@@ -1,6 +1,7 @@
-import { useState } from "react";
-import { useLoaderData } from "react-router";
+import { useState, useEffect } from "react";
+import { useLoaderData, useActionData } from "react-router";
 import type { Route } from "./+types/expenses-tracker";
+import { toast } from "sonner";
 import { getSupabaseServerClient } from "~/utils/supabase.server";
 import { PrismaClient } from "@prisma/client";
 import styles from "./expenses-tracker.module.css";
@@ -72,12 +73,22 @@ export async function action({ request }: Route.ActionArgs) {
     }
   }
 
-  return { ok: true };
+  return { ok: true, intent };
 }
 
 export default function ExpensesTrackerPage() {
   const { expenses, recurring } = useLoaderData<typeof loader>();
+  const actionData = useActionData<typeof action>();
   const [showAddExpense, setShowAddExpense] = useState(false);
+
+  useEffect(() => {
+    if (actionData?.ok) {
+      if (actionData.intent === "create") {
+        toast.success("Expense added successfully");
+        setShowAddExpense(false);
+      }
+    }
+  }, [actionData]);
   
   return (
     <div className={styles.page}>

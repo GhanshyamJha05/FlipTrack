@@ -10,6 +10,7 @@ import { BreadcrumbNavigation } from "./blocks/__global/breadcrumb-navigation";
 import { FooterLinksSection } from "./blocks/__global/footer-links-section";
 import { FooterBottomBar } from "./blocks/__global/footer-bottom-bar";
 import { useLocation } from "react-router";
+import { Toaster } from "sonner";
 
 export const links: Route.LinksFunction = () => [
   { rel: "icon", href: favicon, type: "image/svg+xml" },
@@ -73,6 +74,7 @@ function RootLayout({ children }: { children: React.ReactNode }) {
           <FooterBottomBar />
         </footer>
       )}
+      <Toaster position="top-right" richColors theme="system" />
     </>
   );
 }

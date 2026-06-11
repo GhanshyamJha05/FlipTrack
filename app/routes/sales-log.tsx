@@ -1,6 +1,7 @@
-import { useState } from "react";
-import { useLoaderData } from "react-router";
+import { useState, useEffect } from "react";
+import { useLoaderData, useActionData } from "react-router";
 import type { Route } from "./+types/sales-log";
+import { toast } from "sonner";
 import { getSupabaseServerClient } from "~/utils/supabase.server";
 import { PrismaClient } from "@prisma/client";
 import styles from "./sales-log.module.css";
@@ -65,12 +66,22 @@ export async function action({ request }: Route.ActionArgs) {
     ]);
   }
 
-  return { ok: true };
+  return { ok: true, intent };
 }
 
 export default function SalesLogPage() {
   const { sales, inventory } = useLoaderData<typeof loader>();
+  const actionData = useActionData<typeof action>();
   const [showLogSale, setShowLogSale] = useState(false);
+
+  useEffect(() => {
+    if (actionData?.ok) {
+      if (actionData.intent === "create") {
+        toast.success("Sale logged successfully");
+        setShowLogSale(false);
+      }
+    }
+  }, [actionData]);
   
   return (
     <div className={styles.page}>

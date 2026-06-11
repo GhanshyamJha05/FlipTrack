@@ -1,6 +1,7 @@
-import { useState } from "react";
-import { useLoaderData } from "react-router";
+import { useState, useEffect } from "react";
+import { useLoaderData, useActionData } from "react-router";
 import type { Route } from "./+types/inventory-management";
+import { toast } from "sonner";
 import { getSupabaseServerClient } from "~/utils/supabase.server";
 import { PrismaClient } from "@prisma/client";
 import styles from "./inventory-management.module.css";
@@ -91,15 +92,30 @@ export async function action({ request }: Route.ActionArgs) {
     });
   }
 
-  return { ok: true };
+  return { ok: true, intent };
 }
 
 export default function InventoryManagementPage() {
   const { items } = useLoaderData<typeof loader>();
+  const actionData = useActionData<typeof action>();
   const [showAddItem, setShowAddItem] = useState(false);
   const [showImport, setShowImport] = useState(false);
   const [selected, setSelected] = useState<string[]>([]);
   const [editingItem, setEditingItem] = useState<any>(null);
+
+  useEffect(() => {
+    if (actionData?.ok) {
+      if (actionData.intent === "create") {
+        toast.success("Item added successfully");
+        setShowAddItem(false);
+      } else if (actionData.intent === "update") {
+        toast.success("Item updated");
+        setEditingItem(null);
+      } else if (actionData.intent === "delete") {
+        toast.success("Item deleted");
+      }
+    }
+  }, [actionData]);
 
   return (
     <div className={styles.page}>
