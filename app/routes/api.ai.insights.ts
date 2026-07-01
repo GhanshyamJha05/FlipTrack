@@ -32,14 +32,13 @@ export async function action({ request }: Route.ActionArgs) {
       });
     }
 
-    // Processing items directly inside the action route as requested!
-    const insightsPromises = rawInventory.map(async (item: any) => {
+    const insights = [];
+
+    // FIX 2: Using for...of loop to process sequentially and avoid Groq 429 Rate Limits
+    for (const item of rawInventory) {
       try {
-        const simulatedPriceHistory = [
-          { date: "2026-06-15", askPrice: Number(item.purchasePrice) * 1.05 },
-          { date: "2026-06-22", askPrice: Number(item.purchasePrice) * 1.10 },
-          { date: "2026-06-30", askPrice: Number(item.purchasePrice) * 1.15 }
-        ];
+        // FIX 1: Removed simulated array, using actual item.priceHistory from Prisma loader
+        const actualPriceHistory = item.priceHistory || [];
 
         const { text } = await generateText({
           model: groq('llama-3.3-70b-versatile'),
@@ -47,7 +46,7 @@ export async function action({ request }: Route.ActionArgs) {
                    Always respond with pure JSON in this exact format: {"trend": "string", "recommendation": "BUY"|"SELL"|"HOLD", "reasoning": "string", "targetPrice": number, "confidence": number}`,
           prompt: `
             Product: ${item.name} (SKU: ${item.sku})
-            Price history (simulated): ${JSON.stringify(simulatedPriceHistory)}
+            Price history (from DB): ${JSON.stringify(actualPriceHistory)}
             User's purchase price: ${item.purchasePrice}
             
             Provide a price trend analysis and buy/sell/hold recommendation based on the data.
@@ -57,7 +56,7 @@ export async function action({ request }: Route.ActionArgs) {
         const jsonStr = text.replace(/```json/g, "").replace(/```/g, "").trim();
         const parsedJson = JSON.parse(jsonStr);
 
-        return {
+        insights.push({
           id: item.id,
           name: item.name,
           sku: item.sku,
@@ -66,10 +65,11 @@ export async function action({ request }: Route.ActionArgs) {
           confidence: parsedJson.confidence || 0.8,
           reasoning: parsedJson.reasoning || parsedJson.trend || "Analysis complete.",
           targetPrice: parsedJson.targetPrice || Number(item.purchasePrice) * 1.2,
-        };
+        });
       } catch (err) {
         console.error(`Error analyzing item ${item.sku}:`, err);
-        return {
+        // Fallback item so the whole loop doesn't crash if one item fails
+        insights.push({
           id: item.id,
           name: item.name,
           sku: item.sku,
@@ -78,11 +78,9 @@ export async function action({ request }: Route.ActionArgs) {
           confidence: 0.5,
           reasoning: "AI engine analysis failed temporarily.",
           targetPrice: Number(item.purchasePrice),
-        };
+        });
       }
-    });
-
-    const insights = await Promise.all(insightsPromises);
+    }
 
     return new Response(JSON.stringify({ insights }), {
       status: 200,
