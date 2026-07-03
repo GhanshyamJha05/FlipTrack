@@ -131,6 +131,22 @@ model Team {
   ownerId   String   @unique
   createdAt DateTime @default(now())
   members   User[]
+  invites   Invite[]
+}
+
+model Invite {
+  id        String   @id @default(uuid())
+  teamId    String
+  email     String
+  role      String
+  token     String   @unique
+  createdAt DateTime @default(now())
+  expiresAt DateTime
+
+  team      Team     @relation(fields: [teamId], references: [id], onDelete: Cascade)
+
+  @@index([teamId])
+  @@index([token])
 }
 
 model InventoryItem {

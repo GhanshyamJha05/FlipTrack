@@ -152,6 +152,10 @@ export async function action({ request }: Route.ActionArgs) {
       return { ok: false, intent: "invite-member", error: "A valid email is required" };
     }
     
+    if (role !== "member" && role !== "admin") {
+      return { ok: false, intent: "invite-member", error: "Role must be either 'member' or 'admin'" };
+    }
+
     try {
       const dbUser = await prisma.user.findUnique({ where: { id: authUser.id } });
       if (!dbUser || !dbUser.teamId) {
@@ -162,9 +166,24 @@ export async function action({ request }: Route.ActionArgs) {
          return { ok: false, intent: "invite-member", error: "Only team owners or admins can invite new members" };
       }
       
-      // In a real application, consider using a secure token-based approach and storing it in an Invites table.
+      if (email.toLowerCase() === dbUser.email.toLowerCase()) {
+         return { ok: false, intent: "invite-member", error: "You cannot invite yourself" };
+      }
+      
       const secureToken = crypto.randomUUID();
-      const inviteLink = `https://fliptrack.app/join?teamId=${dbUser.teamId}&email=${encodeURIComponent(email)}&role=${encodeURIComponent(role)}&token=${secureToken}`;
+      
+      // Store the invite in the database (expires in 7 days)
+      await prisma.invite.create({
+        data: {
+          teamId: dbUser.teamId,
+          email: email.toLowerCase(),
+          role: role,
+          token: secureToken,
+          expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
+        }
+      });
+      
+      const inviteLink = `https://fliptrack.app/join?token=${secureToken}`;
       
       return { 
         ok: true, 

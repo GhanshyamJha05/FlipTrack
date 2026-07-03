@@ -1,4 +1,4 @@
-import { Link, Form, useActionData } from "react-router";
+import { Link, Form, useActionData, useNavigation } from "react-router";
 import { useState, useEffect } from "react";
 import styles from "./team-section.module.css";
 
@@ -7,6 +7,8 @@ interface Props { className?: string; user?: any; }
 export function TeamSection({ className, user }: Props) {
   const [isInviteOpen, setIsInviteOpen] = useState(false);
   const actionData = useActionData<any>();
+  const navigation = useNavigation();
+  const isSubmitting = navigation.state === "submitting" && navigation.formData?.get("intent") === "invite-member";
   const [showSuccess, setShowSuccess] = useState(false);
 
   useEffect(() => {
@@ -85,8 +87,8 @@ export function TeamSection({ className, user }: Props) {
                     )}
                     
                     <div className={styles.modalActions}>
-                      <button type="button" className={styles.cancelBtn} onClick={() => { setIsInviteOpen(false); setShowSuccess(false); }}>Cancel</button>
-                      <button type="submit" className={styles.gateBtn}>Send Invite</button>
+                      <button type="button" className={styles.cancelBtn} onClick={() => { setIsInviteOpen(false); setShowSuccess(false); }} disabled={isSubmitting}>Cancel</button>
+                      <button type="submit" className={styles.gateBtn} disabled={isSubmitting}>{isSubmitting ? "Sending..." : "Send Invite"}</button>
                     </div>
                   </Form>
                 )}
