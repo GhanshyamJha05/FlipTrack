@@ -154,7 +154,7 @@ export async function action({ request }: Route.ActionArgs) {
   if (intent === "invite-member") {
     const inviteSchema = z.object({
       email: z.string().email("A valid email is required").toLowerCase(),
-      role: z.enum(["member", "admin"], { errorMap: () => ({ message: "Role must be either 'member' or 'admin'" }) }),
+      role: z.enum(["member", "admin"], { message: "Role must be either 'member' or 'admin'" }),
     });
 
     const parsed = inviteSchema.safeParse({
